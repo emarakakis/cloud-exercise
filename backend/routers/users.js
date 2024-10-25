@@ -10,6 +10,7 @@ router.get("/", (req, res) => {
 // A sample route to handle POST requests to /api/users
 router.post("/", (req, res) => {
     // Access JSON data from the request body
+    console.log(req.body);
     const newUser = req.body;  // JSON data parsed by express.json()
     res.send(`User created: ${JSON.stringify(newUser)}`);
 });

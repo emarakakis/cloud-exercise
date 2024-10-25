@@ -11,7 +11,28 @@ if(login_button){
 		const password = document.querySelector('.js-login-password').value;
 		if(isAccountRegistered(name,password)){
 			localStorage.setItem('user', JSON.stringify(name));
-			window.location.href = '../html/index.html'
+			fetch("http://localhost:3000/users", {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json', // Set the content type to JSON
+				},
+				body: JSON.stringify({ username: name })
+			})
+			.then(response => {
+				if (!response.ok) {
+					throw new Error('Network response was not ok');
+				}
+				return response.text(); // Or response.json() if you're expecting JSON
+			})
+			.then(data => {
+				console.log(data); // This will log the response from the server
+				window.location.href = '../html/index.html';
+			})
+			.catch(error => {
+				console.error('There has been a problem with your fetch operation:', error);
+			});
+			
+			//window.location.href = '../html/index.html'
 		}
 		else{
 			console.log("Try Again!");
