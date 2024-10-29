@@ -1,38 +1,18 @@
-let registered_accounts = JSON.parse(localStorage.getItem('registeredAccounts')) || [{
-	name: 'admin',
-	password: 'admin'
-}]
-
 const login_button = document.querySelector('.js-login-button')
 
 if(login_button){
-	login_button.addEventListener('click', (button) => {
+
+	userLogin()
+}
+
+async function userLogin(){
+	login_button.addEventListener('click', async (button) => {
 		const name = document.querySelector('.js-login-name').value;
 		const password = document.querySelector('.js-login-password').value;
-		if(isAccountRegistered(name,password)){
+		const queryResult = await isAccountRegistered(name,password)
+		if(queryResult){
 			localStorage.setItem('user', JSON.stringify(name));
-			fetch("http://localhost:3000/users", {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json', // Set the content type to JSON
-				},
-				body: JSON.stringify({ username: name })
-			})
-			.then(response => {
-				if (!response.ok) {
-					throw new Error('Network response was not ok');
-				}
-				return response.text(); // Or response.json() if you're expecting JSON
-			})
-			.then(data => {
-				console.log(data); // This will log the response from the server
-				window.location.href = '../html/index.html';
-			})
-			.catch(error => {
-				console.error('There has been a problem with your fetch operation:', error);
-			});
-			
-			//window.location.href = '../html/index.html'
+			window.location.href = '../html/index.html'
 		}
 		else{
 			console.log("Try Again!");
@@ -40,16 +20,48 @@ if(login_button){
 	})
 }
 	
-function isAccountRegistered(name, password) {
-	return registered_accounts.some(account => 
-			account.name === name && account.password === password
-	);
+async function isAccountRegistered(name, password) {
+	try {
+		const response = await fetch("http://localhost:3000/users/login-user", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ name, password })
+		});
+
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
+
+		const data = await response.json(); // Parse the response as JSON
+		return data
+
+	} catch (error) {
+		console.error('There has been a problem with your fetch operation:', error);
+		return false;
+	}
 }
 
-export function registerAccount(name, password) {
-	registered_accounts.push({name, password});
-	saveAccounts();
+export async function registerAccount(name, password) {
+	const response = await fetch("http://localhost:3000/users/register-user", {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({ name, password })
+	});
+
+	// Check if the response is okay (status 200-299)
+	if (!response.ok) {
+		throw new Error('Network response was not ok');
+	}
+
+	// Parse the response as JSON
+	const result = await response.json();
+	return result.success; // `success` is the property you sent back from the server
 }
+
 
 function saveAccounts(){
 	localStorage.setItem('registeredAccounts', JSON.stringify(registered_accounts));

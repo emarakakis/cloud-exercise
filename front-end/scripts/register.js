@@ -1,7 +1,7 @@
 import { registerAccount } from "./login.js";
 
 document.querySelector('.js-register-button')
-    .addEventListener('click', () => {
+    .addEventListener('click', async () => {
         const name = document.querySelector('.js-account-name').value
         const password = document.querySelector('.js-account-password').value
 
@@ -9,6 +9,10 @@ document.querySelector('.js-register-button')
             return;
         }
 
-        registerAccount(name, password);
-        window.location.href = "../html/login.html";
+        const res = await registerAccount(name, password);
+
+        if(res){
+            window.location.href = "../html/login.html";
+        }
+        
     })

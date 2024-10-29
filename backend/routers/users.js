@@ -1,18 +1,46 @@
 // routers/users.js
 const express = require("express");
 const router = express.Router();
+const db = require('../databases/user-database.js');
 
-// A sample route to handle GET requests to /api/users
-router.get("/", (req, res) => {
-    res.send("This is the Users API");
-});
+router.post("/login-user", async(req, res) => {
+    const { name, password } = req.body;
+    console.log(name, password); // Ensure this prints the database connection object
 
-// A sample route to handle POST requests to /api/users
-router.post("/", (req, res) => {
-    // Access JSON data from the request body
-    console.log(req.body);
-    const newUser = req.body;  // JSON data parsed by express.json()
-    res.send(`User created: ${JSON.stringify(newUser)}`);
+    try{
+        const [results] = await db.query("SELECT name, password FROM users WHERE name = ? AND password = ?",
+        [name, password]);
+
+        if (results.length > 0) {
+            console.log("User found!");
+            res.json({ success: true });
+        } else {
+            console.log("User not found.");
+            res.json({ success: false });
+        }
+    }
+    catch (error) {
+        console.error("Database error:", error);
+        res.status(500).json({ success: false, message: "Database error occurred" });
+    }
+})
+
+router.post("/register-user", async (req, res) => {
+    const { name, password } = req.body;
+
+    try {
+        const [result] = await db.query("INSERT INTO users (name, password) VALUES (?, ?)", [name, password]);
+        
+        // Check if the insert was successful
+        if (result.affectedRows === 1) {
+            res.status(201).json({ success: true, message: "User registered successfully", userId: result.insertId });
+        } else {
+            res.status(400).json({ success: false, message: "User registration failed" });
+        }
+    } catch (error) {
+        console.error("Database error:", error);
+        res.status(500).json({ success: false, message: "An error occurred with the database." });
+    }
 });
 
 module.exports = router;
