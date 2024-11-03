@@ -8,12 +8,11 @@ router.post("/login-user", async(req, res) => {
     console.log(name, password); // Ensure this prints the database connection object
 
     try{
-        const [results] = await db.query("SELECT name, password FROM users WHERE name = ? AND password = ?",
+        const [results] = await db.query("SELECT * FROM users WHERE name = ? AND password = ?",
         [name, password]);
 
         if (results.length > 0) {
-            console.log("User found!");
-            res.json({ success: true });
+            res.json({ success: true, userId: results[0].USERID });
         } else {
             console.log("User not found.");
             res.json({ success: false });

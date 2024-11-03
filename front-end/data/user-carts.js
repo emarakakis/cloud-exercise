@@ -2,6 +2,16 @@ export const userCarts = JSON.parse(localStorage.getItem('userCarts')) || [];
 
 // Function to retrieve a user's cart
 export function getUserCart() {
+    fetch(`http://localhost:3000/cart/${JSON.parse(localStorage.getItem('userId'))}`,{
+        method: 'GET',
+        headers: {
+        'Content-Type': 'application/json',
+        },
+})
+
+
+
+
     const user = JSON.parse(localStorage.getItem('user'));
     for (const cart of userCarts) {
         if (cart.user === user) {

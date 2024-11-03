@@ -1,6 +1,5 @@
 import { productById } from "../data/products.js"
 import { getUserCart, saveUserCart } from "../data/user-carts.js";
-export const cart = getUserCart() || [];
 import { hasUserToken } from './utils.js';
 
 if(!hasUserToken()){
@@ -120,7 +119,7 @@ function totalCartQuantity() {
     return totalQuantity;
 }
 
-export function calculateCartPrice(){
+function calculateCartPrice(){
     let totalPrice = 0
     for(const cartItem of cart){
         const product = productById(cartItem.productId);
@@ -130,7 +129,7 @@ export function calculateCartPrice(){
     return (totalPrice / 100).toFixed(2);
 }
 
-export function addToCart(productId, quantity){
+function addToCart(productId, quantity){
     
     const itemFound = findProductInCart(productId)
     if(!itemFound){
@@ -144,7 +143,9 @@ export function addToCart(productId, quantity){
     saveCart();
 }
 
-export function cleanCart(){
+function cleanCart(){
     cart.splice(0, cart.length);
     saveCart();
 }
+
+module.exports = {cart, cleanCart, addToCart, calculateCartPrice}

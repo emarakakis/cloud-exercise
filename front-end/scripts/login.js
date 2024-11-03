@@ -11,7 +11,6 @@ async function userLogin(){
 		const password = document.querySelector('.js-login-password').value;
 		const queryResult = await isAccountRegistered(name,password)
 		if(queryResult){
-			localStorage.setItem('user', JSON.stringify(name));
 			window.location.href = '../html/index.html'
 		}
 		else{
@@ -35,6 +34,12 @@ async function isAccountRegistered(name, password) {
 		}
 
 		const data = await response.json(); // Parse the response as JSON
+		if (data.success){
+			console.log(data.userId);
+			localStorage.setItem('userId', JSON.stringify(data.userId));
+			localStorage.setItem('user', JSON.stringify(name));
+		}
+		
 		return data
 
 	} catch (error) {

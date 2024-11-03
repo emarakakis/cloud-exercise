@@ -2,6 +2,8 @@ import { hasUserToken } from "./utils.js";
 import { cart, addToCart } from "./cart.js";
 import { loadProducts } from "../data/products.js";
 
+const basaImageURL = "http://localhost:3000/images"
+
 async function displayProducts() {
     let displayProductsHTML = '';
 
@@ -15,7 +17,7 @@ async function displayProducts() {
             <div class="product-container">
                 <div class="product-inner-container">
                     <div class="product-information">
-                        <img class="product-image" src="${product.image}">
+                        <img class="product-image" src="${basaImageURL}/${product.image}">
                         <p class="product-name">${product.name}</p>
                         <p class="price">${(product.priceCents / 100).toFixed(2)}$</p>
                     </div>
@@ -52,7 +54,17 @@ async function displayProducts() {
         });
 
     document.querySelector('.js-user-greetings').innerHTML = `Hello ${JSON.parse(localStorage.getItem('user'))}`;
+
+    document.querySelector('.js-cart-quantity')
+        .addEventListener('click', (button) => {
+            fetch(`http://localhost:3000/cart/${JSON.parse(localStorage.getItem('userId'))}`,{
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({cart})
+        })
+    })
 }
 
-// Run the displayProducts function
 displayProducts();

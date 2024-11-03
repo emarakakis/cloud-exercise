@@ -10,11 +10,12 @@
     <header>
         <a class="header-button" onclick="
                 localStorage.setItem('user', JSON.stringify(''))
+                localStorage.setItem('userId', JSON.stringify(''))
             "href="../html/login.html"><button>Logout</button></a>
         
         <p class="user-greetings js-user-greetings">Hello User!</p>
         <div>
-            <a class="header-button js-cart-quantity" href="./cart.html"><button>Cart</button></a>
+            <a class="header-button js-cart-quantity"><button>Cart</button></a>
             <a class="header-button" href="./view-user-orders.html"><button>Orders</button></a>    
         </div>
     </header>
