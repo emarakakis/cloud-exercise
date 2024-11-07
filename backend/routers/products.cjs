@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../databases/product-database.js');
+const db = require('../databases/product-database.cjs');
 
 const server_url = "http://localhost:3000"
 

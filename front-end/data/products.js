@@ -1,17 +1,15 @@
-//import { cart } from "../scripts/cart";
-
-const products = loadProducts();
+export const products = await loadProducts();
  
-function productById(productId){
+export function productById(productId){
     for(const product of products){
-        if (product.id === productId){
+        if (parseInt(product.id) === parseInt(productId)){
             return product;
         }
     }
     return products[1];
 }
 
-async function loadProducts() {
+export async function loadProducts() {
     try {
         const res = await fetch("http://localhost:3000/products/product-list", {
             method: 'GET',
@@ -33,5 +31,3 @@ async function loadProducts() {
         return []; // Return an empty array or handle error as needed
     }
 }
-
-module.exports = {products, loadProducts, productById}

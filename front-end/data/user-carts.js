@@ -8,10 +8,6 @@ export function getUserCart() {
         'Content-Type': 'application/json',
         },
 })
-
-
-
-
     const user = JSON.parse(localStorage.getItem('user'));
     for (const cart of userCarts) {
         if (cart.user === user) {

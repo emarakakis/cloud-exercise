@@ -2,9 +2,9 @@ const express = require("express");
 const app = express();
 const cors = require('cors');
 const path = require("path");
-const productRouter = require("./routers/products.js");
-const userRouter = require("./routers/users.js");
-const cartRouter = require("./routers/cart.js");
+const productRouter = require("./routers/products.cjs");
+const userRouter = require("./routers/users.cjs");
+const cartRouter = require("./routers/cart.cjs");
 
 app.use(express.json());
 app.use(cors());

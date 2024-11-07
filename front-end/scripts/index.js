@@ -1,16 +1,17 @@
-import { hasUserToken } from "./utils.js";
-import { cart, addToCart } from "./cart.js";
-import { loadProducts } from "../data/products.js";
+import { cart, addToCart, totalCartQuantity } from "./cart.js";
+import { products } from "../data/products.js";
 
 const basaImageURL = "http://localhost:3000/images"
+let cartQuantity = -1;
+
+//const products = await loadProducts() || []; 
+//const cart = await loadUserCart() || [];
 
 async function displayProducts() {
     let displayProductsHTML = '';
 
     // Wait until products are fetched
-    const products = await loadProducts() || []; 
 
-    console.log(products);
 
     products.forEach((product) => {
         displayProductsHTML += `
@@ -49,22 +50,40 @@ async function displayProducts() {
             button.addEventListener('click', () => {
                 const productId = button.dataset.productId;
                 const quantity = Number(document.querySelector(`.js-selector-quantity-${productId}`).value);
-                addToCart(productId, quantity);
+                addToCart(cart, productId, quantity);
+                updateCartQuantity(cart, quantity)
             });
+
+            
         });
 
     document.querySelector('.js-user-greetings').innerHTML = `Hello ${JSON.parse(localStorage.getItem('user'))}`;
 
-    document.querySelector('.js-cart-quantity')
-        .addEventListener('click', (button) => {
-            fetch(`http://localhost:3000/cart/${JSON.parse(localStorage.getItem('userId'))}`,{
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({cart})
-        })
+    const cartButton = document.querySelector('.js-cart-quantity')
+    cartButton.addEventListener('click', (button) => {
+        fetch(`http://localhost:3000/cart/${JSON.parse(localStorage.getItem('userId'))}`,{
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({cart})
+        })  
     })
+    
 }
 
 displayProducts();
+updateCartQuantity(cart);
+
+export function updateCartQuantity(cart, quantity){
+    
+    const cartButton = document.querySelector('.js-cart-quantity')
+    console.log(cartQuantity + quantity)
+    if(cartQuantity == -1){
+        cartQuantity = totalCartQuantity(cart)
+    }
+    else{
+        cartQuantity += quantity
+    }
+    cartButton.innerHTML = cartQuantity;
+}

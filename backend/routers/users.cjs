@@ -1,7 +1,7 @@
 // routers/users.js
 const express = require("express");
 const router = express.Router();
-const db = require('../databases/user-database.js');
+const db = require('../databases/user-database.cjs');
 
 router.post("/login-user", async(req, res) => {
     const { name, password } = req.body;

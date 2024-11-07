@@ -1,6 +1,7 @@
-import { productById } from "../data/products.js"
-import { getUserCart, saveUserCart } from "../data/user-carts.js";
+import { productById } from "../data/products.js";
 import { hasUserToken } from './utils.js';
+
+export let cart = await loadUserCart()
 
 if(!hasUserToken()){
     window.location.href ="../html/login.html";
@@ -17,6 +18,7 @@ function displayCart(){
     displayHTML = ''
     cart.forEach( item => {
         const curProduct = productById(item.productId);
+        
         displayHTML += 
         `
             <div class = "cart-product js-cart-product-${item.productId}">
@@ -31,10 +33,23 @@ function displayCart(){
 
     document.querySelectorAll('.js-remove-item')
         .forEach( (button) => {
-            button.addEventListener('click', () => {
+            button.addEventListener('click', async () => {
                 const idToRemove = button.dataset.productId;
-                removeItemFromCart(idToRemove);
-                saveCart()
+
+                const res = await fetch(`http://localhost:3000/cart/rmv/${JSON.parse(localStorage.getItem('userId'))}-${idToRemove}`,{
+                    method: 'GET',
+                    headers: {
+                    'Content-Type': 'application/json',
+                    },
+                });
+
+                const data = await res.json();
+
+                cart = data.cart
+                
+
+                //removeItemFromCart(idToRemove);
+                //saveCart()
                 displayCart();
             })
         })
@@ -49,22 +64,34 @@ function displayCart(){
                     <button class="js-quantity-save-${productId}"">Save</button>
                 `
                 document.querySelector(`.js-quantity-save-${productId}`)
-                        .addEventListener('click', () => {
+                        .addEventListener('click', async () => {
                             const productId = button.dataset.productId;
                             const onUpdate = document.querySelector(`.js-on-quantity-update-${productId}`);
-                            const newQuantity = document.querySelector(`.js-new-quantity-${productId}`).value;
+                            const newQuantity = Number(document.querySelector(`.js-new-quantity-${productId}`).value);
+                            console.log(typeof newQuantity)
                             const cartItem = cart[findItemIndexFromProductId(productId)]
                             if(newQuantity == 0){
-                                removeItemFromCart(productId);
+                                //Make the remove fetch a function and call it here!
+                                //removeItemFromCart(productId);
                             } else if (newQuantity < 0){
                                 onUpdate.innerHTML='';
                                 return;
                             } else {
-                                cartItem.quantity = newQuantity
                                 onUpdate.innerHTML='';
+                                const res = await fetch(`http://localhost:3000/cart/upt/${JSON.parse(localStorage.getItem('userId'))}-${productId}`,{
+                                    method: 'POST',
+                                    headers: {
+                                    'Content-Type': 'application/json',
+                                    },
+                                    body : JSON.stringify({quantity: newQuantity})
+                                });
+                                
+                                const data = await res.json();
+                                cart = data.cart;
+                                console.log(cart)
+                                
                             }
 
-                            saveCart();
                             displayCart();
                 })
             })
@@ -81,14 +108,14 @@ function displayCart(){
     
 }
 
-function removeItemFromCart(productId) {
-    const index = findItemIndexFromProductId(productId);
+function removeItemFromCart(cart, productId) {
+    const index = findItemIndexFromProductId(cart, productId);
     if (index !== -1) {  // Check if the item exists
         cart.splice(index, 1);  // Remove the item from the cart
     }
 }
 
-function findItemIndexFromProductId(productId) {
+function findItemIndexFromProductId(cart, productId) {
     for (let i = 0; i < cart.length; i++) {
         if (cart[i].productId === productId) {
             return i;  // Return the index of the item
@@ -97,11 +124,7 @@ function findItemIndexFromProductId(productId) {
     return -1;  // Return -1 if not found
 }
 
-function saveCart(){
-    saveUserCart(JSON.parse(localStorage.getItem('user')), cart);
-}
-
-function findProductInCart(productId) {
+function findProductInCart(cart, productId) {
     for (const item of cart) {
         if (item.productId === productId) {
             return item;
@@ -110,7 +133,7 @@ function findProductInCart(productId) {
     return false;
 }
 
-function totalCartQuantity() {
+export function totalCartQuantity() {
     let totalQuantity = 0;
     for (const item of cart){
         totalQuantity += item.quantity;
@@ -119,7 +142,7 @@ function totalCartQuantity() {
     return totalQuantity;
 }
 
-function calculateCartPrice(){
+export function calculateCartPrice(){
     let totalPrice = 0
     for(const cartItem of cart){
         const product = productById(cartItem.productId);
@@ -129,23 +152,44 @@ function calculateCartPrice(){
     return (totalPrice / 100).toFixed(2);
 }
 
-function addToCart(productId, quantity){
+export async function addToCart(productId, quantity){
+    const res = await fetch(`http://localhost:3000/cart/${JSON.parse(localStorage.getItem('userId'))}`,{
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({productId: parseInt(productId), quantity})
+    });
     
-    const itemFound = findProductInCart(productId)
-    if(!itemFound){
-        cart.push({productId, quantity})
-    } else {
-        itemFound.quantity += quantity;
-    }
-    document.querySelector('.js-cart-quantity')
-        .innerHTML = totalCartQuantity();
-
-    saveCart();
 }
 
-function cleanCart(){
+async function loadUserCart(){
+    const res = await fetch(`http://localhost:3000/cart/${JSON.parse(localStorage.getItem('userId'))}`,{
+        method: 'GET',
+        headers: {
+        'Content-Type': 'application/json',
+        },
+    })
+
+    const data = await res.json();  // Get the JSON response
+
+    // Access the cartProducts from the parsed response
+    const cartRet = data.cartProducts;
+
+    if(!cartRet){
+        console.log("New!")
+        return []
+    }
+    
+    else{
+        console.log("Old!");
+        return cartRet;
+    }
+}
+
+
+
+export function cleanCart(){
     cart.splice(0, cart.length);
     saveCart();
 }
-
-module.exports = {cart, cleanCart, addToCart, calculateCartPrice}
