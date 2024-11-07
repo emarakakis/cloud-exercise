@@ -5,14 +5,17 @@ const path = require("path");
 const productRouter = require("./routers/products.cjs");
 const userRouter = require("./routers/users.cjs");
 const cartRouter = require("./routers/cart.cjs");
+const orderRouter = require("./routers/orders.cjs");
 
 app.use(express.json());
 app.use(cors());
+
 
 app.use('/images', express.static(path.join(__dirname, 'product-images')));
 app.use('/users', userRouter);
 app.use('/products', productRouter);
 app.use('/cart', cartRouter);
+app.use('/orders', orderRouter);
 
 app.get("/", function(request, response){
     response.send("Hello World!");

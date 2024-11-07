@@ -87,9 +87,8 @@ function displayCart(){
                                 });
                                 
                                 const data = await res.json();
-                                cart = data.cart;
-                                console.log(cart)
-                                
+
+                                cart = data.success ? data.cart : cart;
                             }
 
                             displayCart();
@@ -158,9 +157,20 @@ export async function addToCart(productId, quantity){
         headers: {
         'Content-Type': 'application/json',
         },
-        body: JSON.stringify({productId: parseInt(productId), quantity})
+        body: JSON.stringify({productId: parseInt(productId), quantity: quantity})
     });
     
+    const data = await res.json();
+
+    if(data.success){
+        return true;
+    }
+
+    if(data.message === "quantity"){
+        console.log("The quantity is at false!");
+        
+    }
+    return false;
 }
 
 async function loadUserCart(){
@@ -189,7 +199,20 @@ async function loadUserCart(){
 
 
 
-export function cleanCart(){
-    cart.splice(0, cart.length);
-    saveCart();
+export async function cleanCart(){
+    const res = await fetch(`http://localhost:3000/cart/cln/${JSON.parse(localStorage.getItem('userId'))}`,{
+        method: 'GET',
+        headers: {
+        'Content-Type': 'application/json',
+        },
+    })
+
+    const data = await res.json();
+    if (data.success){
+        cart = []
+    } else {
+        console.error("Something went wrong with cart cleanup!")   
+    }
+
+
 }

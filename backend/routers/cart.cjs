@@ -2,12 +2,19 @@ const express = require('express');
 const router = express.Router();
 const server_url = "http://localhost:3000";
 const db = require('../databases/user-database.cjs');
+const productdb = require('../databases/product-database.cjs');
 
 router.post("/:userId", async (req, res) => {
     const userId = req.params.userId;
     const productAdded = req.body;
     const table_name = `cart-${userId}`;
     try {
+        const q = await checkProductQuantity(productAdded, userId, 0) 
+        if (!q){
+            res.json({success:false, message:"quantity"})
+            return;
+        }
+        
         const [results] = await db.query(`SELECT * FROM \`${table_name}\` WHERE productId = ?`, [productAdded.productId])
         
         if (results[0]){
@@ -18,6 +25,7 @@ router.post("/:userId", async (req, res) => {
                 `UPDATE \`${table_name}\` SET quantity = ? WHERE productId = ?`, 
                 [newQuantity, productAdded.productId]
             );   
+            res.json({success: true})
         }
 
         else {
@@ -26,11 +34,12 @@ router.post("/:userId", async (req, res) => {
                 `INSERT INTO \`${table_name}\` (productId, quantity) VALUES (?, ?)`,
                 [productAdded.productId, productAdded.quantity]
             );
+            res.json({success: true})
         }
 
     } catch (error) {
         console.error("Database error:", error);
-        res.status(500).json({ success: false, message: "Database error occurred" });
+        res.status(500).json({ success: false, message: "database" });
     }
 });
 
@@ -105,7 +114,13 @@ router.post("/upt/:userId-:productId", async(req, res) => {
     try{
         const [results] = await db.query(`SELECT * FROM \`${tableName}\` WHERE productId = ?`, [productId])
         if (results.length > 0){
-            console.log("Fuck yeah buddyy");
+
+            const q = await checkProductQuantity({productId: productId, quantity: newQuantity}, userId, 1);
+            if (!q){
+                res.json({success:false, message:"quantity"})
+                return;
+            }
+
             await db.query(`UPDATE \`${tableName}\` SET quantity = ? WHERE productId = ?`, [newQuantity,productId]);
             const [cart] = await db.query(`SELECT * FROM \`${tableName}\``);
             res.json( {success: true, cart});
@@ -120,4 +135,42 @@ router.post("/upt/:userId-:productId", async(req, res) => {
     }
 })
 
+router.get("/cln/:userId", async (req, res) => {
+    const userId = req.params.userId;
+    const tableName = `cart-${userId}`
+
+    try {
+        await db.query(`TRUNCATE \`${tableName}\``);
+        res.json({success: true})
+    } catch {
+        console.log("Wtf went wrong here");
+        res.json({success: false})
+    }
+
+
+})
+
+async function checkProductQuantity(productAdded, userId, update){
+    const tableName = `cart-${userId}`
+    const [productQuantity] = await productdb.query(`SELECT * FROM productquantity WHERE id = ?`, [productAdded.productId]);
+    if(productQuantity.length <= 0){
+        return;
+    }
+    let curQuantity = 0
+    if(!update){
+        const [currentInCart] = await db.query(`SELECT quantity FROM \`${tableName}\` WHERE productId = ?`, [productAdded.productId]);
+        curQuantity = currentInCart[0] ? productAdded.quantity + currentInCart[0].quantity : productAdded.quantity;
+    }
+    else{
+        curQuantity = productAdded.quantity;
+    }
+
+    
+    if(productQuantity[0].quantity < curQuantity){
+        return false;
+    }
+    else{
+        return true;
+    }
+}
 module.exports = router;

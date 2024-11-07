@@ -6,9 +6,9 @@ const server_url = "http://localhost:3000"
 
 router.get("/product-list", async (req, res) => {
     try{
-        const [results] = await db.query("SELECT * FROM products")
-        if (results.length > 0) {
-            res.json({ success: true, products:results });
+        const [products] = await db.query("SELECT products.* FROM products INNER JOIN productquantity WHERE products.id = productquantity.id AND productquantity.quantity > 0")
+        if (products.length > 0) {
+            res.json({ success: true, products: products });
         } else {
             res.json({ success: false, products:[] });
         }

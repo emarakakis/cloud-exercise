@@ -1,5 +1,5 @@
 import { cart, calculateCartPrice, cleanCart } from "./cart.js";
-export let orders = JSON.parse(localStorage.getItem('orders')) || []
+//export let orders = await loadOrders()
 import { hasUserToken } from './utils.js';
 
 if(!hasUserToken()){
@@ -15,35 +15,30 @@ if (orderDisplay){
     const orderButton = document.querySelector('.js-finish-order');
     
     price.innerHTML = calculateCartPrice();
-    orderButton.addEventListener('click', () => {
+    orderButton.addEventListener('click', async () => {
         const firstName = document.querySelector('.js-order-first-name').value;
         const surname = document.querySelector('.js-order-surname').value;  
         const email = document.querySelector('.js-order-email').value;
         const city = document.querySelector('.js-order-city').value;
-        const user = JSON.parse(localStorage.getItem('user'));
         const products = cart;
-        console.log(products);
-        addOrder(getUniqueOrderID(),user, firstName, surname, email, city, products, calculateCartPrice())
-        saveOrders();
-        cleanCart();
+        await addOrder(firstName, surname, email, city, products, calculateCartPrice())
+        //cleanCart();
         //window.location.href="../html/index.html";
-        console.log(orders);
     })
 }
 
-function addOrder(orderId,user, firstName, surname, email, city, products, price){
-    const newOrder = {orderId,user, firstName, surname, email, city, products, price}
-    orders.push(newOrder);
-}
+async function addOrder(firstName, surname, email, city, products, price){
+    const res = await fetch(`http://localhost:3000/orders/${JSON.parse(localStorage.getItem('userId'))}`,{
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+        },
+        body : JSON.stringify({firstName, surname, email, city, products, price})
+    });
 
-function getUniqueOrderID(){
-    const res = `${orderCount++}`;
-    localStorage.setItem('orderCount', orderCount);
-    return res
-}
+    const data = await res.json()
 
-function saveOrders(){
-    localStorage.setItem('orders', JSON.stringify(orders));
+    return data.orders;
 }
 
 export function removeOrderById(orderId) {
@@ -70,4 +65,18 @@ export function findUserOrders(user){
         }
     }
     return userOrders;
+}
+
+async function loadOrders() {
+    const res = await fetch(`http://localhost:3000/orders/${JSON.parse(localStorage.getItem('userId'))}`,{
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+        },
+    });
+
+    const data = await res.json()
+
+    return data.orders;
+    
 }

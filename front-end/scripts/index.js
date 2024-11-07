@@ -47,11 +47,12 @@ async function displayProducts() {
     // Attach event listeners after the HTML is rendered
     document.querySelectorAll('.js-buy-button')
         .forEach((button) => {
-            button.addEventListener('click', () => {
+            button.addEventListener('click', async () => {
                 const productId = button.dataset.productId;
                 const quantity = Number(document.querySelector(`.js-selector-quantity-${productId}`).value);
-                addToCart(cart, productId, quantity);
-                updateCartQuantity(cart, quantity)
+                let success = await addToCart(productId, quantity);
+                if (success)
+                    updateCartQuantity(quantity)
             });
 
             
@@ -73,14 +74,14 @@ async function displayProducts() {
 }
 
 displayProducts();
-updateCartQuantity(cart);
+updateCartQuantity();
 
-export function updateCartQuantity(cart, quantity){
+export function updateCartQuantity(quantity){
     
     const cartButton = document.querySelector('.js-cart-quantity')
     console.log(cartQuantity + quantity)
     if(cartQuantity == -1){
-        cartQuantity = totalCartQuantity(cart)
+        cartQuantity = totalCartQuantity()
     }
     else{
         cartQuantity += quantity
