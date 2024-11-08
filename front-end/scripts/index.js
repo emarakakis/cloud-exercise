@@ -4,13 +4,8 @@ import { products } from "../data/products.js";
 const basaImageURL = "http://localhost:3000/images"
 let cartQuantity = -1;
 
-//const products = await loadProducts() || []; 
-//const cart = await loadUserCart() || [];
-
 async function displayProducts() {
     let displayProductsHTML = '';
-
-    // Wait until products are fetched
 
 
     products.forEach((product) => {

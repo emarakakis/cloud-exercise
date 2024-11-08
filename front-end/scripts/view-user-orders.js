@@ -9,11 +9,12 @@ if(!hasUserToken()){
 const viewDisplay = document.querySelector('.js-view-order-display');
 
 if(viewDisplay){
-    displayOrders();
+    await displayOrders();
 }
 
-function displayOrders(){
-    const userOrders = findUserOrders(JSON.parse(localStorage.getItem('user')));
+async function displayOrders(){
+    console.log("In display!")
+    const userOrders = await findUserOrders();
     console.log(userOrders);
     let displayHTML = ''
     userOrders.forEach( order => {
@@ -46,10 +47,12 @@ function displayOrders(){
 
     document.querySelectorAll('.js-button-remove-order')
         .forEach( (button) => {
-            button.addEventListener('click', () => {
+            button.addEventListener('click', async () => {
                 const orderId = button.dataset.orderId;
-                removeOrderById(orderId);
-                displayOrders();
+                console.log("Pressed the button");
+                await removeOrderById(orderId);
+                console.log("Out of the async");
+                window.location.href = "."
             })
         })
 }

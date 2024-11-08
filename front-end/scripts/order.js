@@ -21,9 +21,9 @@ if (orderDisplay){
         const email = document.querySelector('.js-order-email').value;
         const city = document.querySelector('.js-order-city').value;
         const products = cart;
+
         await addOrder(firstName, surname, email, city, products, calculateCartPrice())
-        //cleanCart();
-        //window.location.href="../html/index.html";
+        window.location.href="../html/index.html";
     })
 }
 
@@ -35,48 +35,33 @@ async function addOrder(firstName, surname, email, city, products, price){
         },
         body : JSON.stringify({firstName, surname, email, city, products, price})
     });
-
-    const data = await res.json()
-
-    return data.orders;
 }
 
-export function removeOrderById(orderId) {
-    console.log(orders);
-    for (let i = 0; i < orders.length; i++) {
-        if (orderId === orders[i].orderId) {
-            orders.splice(i, 1);
-            break;
-        }
-    }
-    saveOrders();
-
-    console.log(orders);
-}
-
-
-export function findUserOrders(user){
-    const userOrders = []
-    for(const order of orders){
-        console.log(user)
-        console.log(order.user)
-        if(user===order.user){
-            userOrders.push(order);
-        }
-    }
-    return userOrders;
-}
-
-async function loadOrders() {
-    const res = await fetch(`http://localhost:3000/orders/${JSON.parse(localStorage.getItem('userId'))}`,{
+export async function removeOrderById(orderId) {
+    const res = await fetch(`http://localhost:3000/orders/rmv/order`,{
         method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+        },
+        body : JSON.stringify({orderId})
+    });
+
+    console.log("Out of remove!");
+    const data = await res.json()
+    
+    return data.orders;    
+    
+}
+
+
+export async function findUserOrders(){
+    const res = await fetch(`http://localhost:3000/orders/view/${JSON.parse(localStorage.getItem('userId'))}`,{
+        method: 'GET',
         headers: {
         'Content-Type': 'application/json',
         },
     });
 
     const data = await res.json()
-
-    return data.orders;
-    
+    return data.orders;    
 }
