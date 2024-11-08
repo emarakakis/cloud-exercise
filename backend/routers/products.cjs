@@ -2,8 +2,6 @@ const express = require('express');
 const router = express.Router();
 const db = require('../databases/product-database.cjs');
 
-const server_url = "http://localhost:3000"
-
 router.get("/product-list", async (req, res) => {
     try{
         const [products] = await db.query("SELECT products.* FROM products INNER JOIN productquantity WHERE products.id = productquantity.id AND productquantity.quantity > 0")

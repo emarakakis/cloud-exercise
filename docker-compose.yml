@@ -1,0 +1,39 @@
+version: '3'
+services:
+  frontend:
+    build: ./front-end
+    ports:
+      - "80:80"
+    depends_on:
+      - ordersDB
+      - productsDB
+
+  backend:
+    build: ./backend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - ordersDB
+      - productsDB
+
+  ordersDB:
+    image: mysql:8
+    container_name: orders_db
+    environment:
+      MYSQL_ROOT_PASSWORD: 123  # Keep this, it's for the root password
+      MYSQL_DATABASE: orders    # The database to be created
+    ports:
+      - "3308:3306"
+    volumes:
+      - ./mysql-init/orders-init:/docker-entrypoint-initdb.d:ro
+
+  productsDB:
+    image: mysql:8
+    container_name: products_db
+    environment:
+      MYSQL_ROOT_PASSWORD: 123  # Keep this, it's for the root password
+      MYSQL_DATABASE: products  # The database to be created
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./mysql-init/products-init:/docker-entrypoint-initdb.d:ro
