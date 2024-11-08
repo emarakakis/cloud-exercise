@@ -57,7 +57,7 @@ async function displayProducts() {
 
     const cartButton = document.querySelector('.js-cart-quantity')
     cartButton.addEventListener('click', (button) => {
-        fetch(`http://localhost:3000/cart/${JSON.parse(localStorage.getItem('userId'))}`,{
+        fetch(`http://backend:3000/cart/${JSON.parse(localStorage.getItem('userId'))}`,{
             method: 'POST',
             headers: {
             'Content-Type': 'application/json',

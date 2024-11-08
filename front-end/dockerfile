@@ -1,0 +1,12 @@
+FROM nginx:alpine
+
+RUN rm -rf /usr/share/nginx/html/*
+
+COPY ./html /usr/share/nginx/html
+COPY ./scripts /usr/share/nginx/html/scripts
+COPY ./styles /usr/share/nginx/html/styles
+COPY ./data /usr/share/nginx/html/data
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]

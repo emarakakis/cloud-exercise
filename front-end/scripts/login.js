@@ -21,7 +21,7 @@ async function userLogin(){
 	
 async function isAccountRegistered(name, password) {
 	try {
-		const response = await fetch("http://localhost:3000/users/login-user", {
+		const response = await fetch("http://backend:3000/users/login-user", {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ async function isAccountRegistered(name, password) {
 }
 
 export async function registerAccount(name, password) {
-	const response = await fetch("http://localhost:3000/users/register-user", {
+	const response = await fetch("http://backend:3000/users/register-user", {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
