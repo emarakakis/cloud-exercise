@@ -7,6 +7,8 @@ const userRouter = require("./routers/users.cjs");
 const cartRouter = require("./routers/cart.cjs");
 const orderRouter = require("./routers/orders.cjs");
 
+
+
 app.use(express.json());
 app.use(cors());
 
@@ -21,6 +23,8 @@ app.get("/", function(request, response){
     response.send("Hello World!");
 })
 
-app.listen(3000, function() {
+const port = process.env.PORT || 3000
+
+app.listen(port, function() {
     console.log("Started application on port %d", 3000);
 });
