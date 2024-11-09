@@ -1,5 +1,5 @@
 import { cart, addToCart, totalCartQuantity } from "./cart.js";
-import { products } from "../data/products.js";
+import { products } from "./products.js";
 
 const basaImageURL = "http://localhost:3000/images"
 let cartQuantity = -1;
@@ -57,7 +57,7 @@ async function displayProducts() {
 
     const cartButton = document.querySelector('.js-cart-quantity')
     cartButton.addEventListener('click', (button) => {
-        fetch(`http://backend:3000/cart/${JSON.parse(localStorage.getItem('userId'))}`,{
+        fetch(`http://localhost:3000/cart/${JSON.parse(localStorage.getItem('userId'))}`,{
             method: 'POST',
             headers: {
             'Content-Type': 'application/json',

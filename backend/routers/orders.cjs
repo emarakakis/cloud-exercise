@@ -1,17 +1,20 @@
-const express = require('express')
+const express = require('express');
 const router = express.Router();
-const userDB = require('../databases/user-database.cjs')
-const productDB = require('../databases/product-database.cjs')
+const userDB = require('../databases/user-database.cjs');
+const productDB = require('../databases/product-database.cjs');
 
 router.get('/view/:userId', async (req, res) =>{
     const userId = req.params.userId;
-
     try 
     {
         const [userOrders] = await userDB.query("SELECT * FROM orders WHERE userId = ?", [userId])
+        const [products] = await productDB.query("SELECT * FROM products")
+        console.log(products);
+        console.log(userOrders);
         for(const order of userOrders){
             const tableName = `products-${order.orderId}`
             const [orderProducts] = await userDB.query(`SELECT * FROM \`${tableName}\``)
+            console.log(orderProducts);
             order.products = orderProducts
         }
 
@@ -22,6 +25,7 @@ router.get('/view/:userId', async (req, res) =>{
 })
 
 router.post('/:userId', async (req, res) => {
+    console.log("Got in little bitch!");
     const userId = req.params.userId;
     const { firstName, surname, email, city, products, price } = req.body;
 

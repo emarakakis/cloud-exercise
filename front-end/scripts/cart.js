@@ -1,10 +1,10 @@
-import { productById } from "../data/products.js";
+import { productById } from "./products.js";
 import { hasUserToken } from './utils.js';
 
 export let cart = await loadUserCart()
 
 if(!hasUserToken()){
-    window.location.href ="../html/login.html";
+    window.location.href ="./login.html";
 }
 let displayHTML = ''
 
@@ -36,7 +36,7 @@ function displayCart(){
             button.addEventListener('click', async () => {
                 const idToRemove = button.dataset.productId;
 
-                const res = await fetch(`http://backend:3000/cart/rmv/${JSON.parse(localStorage.getItem('userId'))}-${idToRemove}`,{
+                const res = await fetch(`http://localhost:3000/cart/rmv/${JSON.parse(localStorage.getItem('userId'))}-${idToRemove}`,{
                     method: 'GET',
                     headers: {
                     'Content-Type': 'application/json',
@@ -78,7 +78,7 @@ function displayCart(){
                                 return;
                             } else {
                                 onUpdate.innerHTML='';
-                                const res = await fetch(`http://backend:3000/cart/upt/${JSON.parse(localStorage.getItem('userId'))}-${productId}`,{
+                                const res = await fetch(`http://localhost:3000/cart/upt/${JSON.parse(localStorage.getItem('userId'))}-${productId}`,{
                                     method: 'POST',
                                     headers: {
                                     'Content-Type': 'application/json',
@@ -101,7 +101,7 @@ function displayCart(){
     document.querySelector('.js-order-button')
         .addEventListener('click', () => {
             if(totalCartQuantity() > 0){
-                window.location.href = "../html/order.html";
+                window.location.href = "./order.html";
             }
         })
     
@@ -152,7 +152,7 @@ export function calculateCartPrice(){
 }
 
 export async function addToCart(productId, quantity){
-    const res = await fetch(`http://backend:3000/cart/${JSON.parse(localStorage.getItem('userId'))}`,{
+    const res = await fetch(`http://localhost:3000/cart/${JSON.parse(localStorage.getItem('userId'))}`,{
         method: 'POST',
         headers: {
         'Content-Type': 'application/json',
@@ -174,7 +174,7 @@ export async function addToCart(productId, quantity){
 }
 
 async function loadUserCart(){
-    const res = await fetch(`http://backend:3000/cart/${JSON.parse(localStorage.getItem('userId'))}`,{
+    const res = await fetch(`http://localhost:3000/cart/${JSON.parse(localStorage.getItem('userId'))}`,{
         method: 'GET',
         headers: {
         'Content-Type': 'application/json',
@@ -200,7 +200,7 @@ async function loadUserCart(){
 
 
 export async function cleanCart(){
-    const res = await fetch(`http://backend:3000/cart/cln/${JSON.parse(localStorage.getItem('userId'))}`,{
+    const res = await fetch(`http://localhost:3000/cart/cln/${JSON.parse(localStorage.getItem('userId'))}`,{
         method: 'GET',
         headers: {
         'Content-Type': 'application/json',

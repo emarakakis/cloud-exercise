@@ -1,11 +1,15 @@
 FROM nginx:alpine
 
+# Clear default directory
 RUN rm -rf /usr/share/nginx/html/*
 
+# Copy custom Nginx configuration
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# Copy files to appropriate locations
 COPY ./html /usr/share/nginx/html
-COPY ./scripts /usr/share/nginx/html/scripts
-COPY ./styles /usr/share/nginx/html/styles
-COPY ./data /usr/share/nginx/html/data
+COPY ./scripts /usr/share/nginx/scripts
+COPY ./styles /usr/share/nginx/styles
 
 EXPOSE 80
 

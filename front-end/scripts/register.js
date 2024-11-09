@@ -12,7 +12,7 @@ document.querySelector('.js-register-button')
         const res = await registerAccount(name, password);
 
         if(res){
-            window.location.href = "../html/login.html";
+            window.location.href = "./login.html";
         }
         
     })

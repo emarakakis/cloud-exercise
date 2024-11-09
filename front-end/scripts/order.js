@@ -3,7 +3,7 @@ import { cart, calculateCartPrice, cleanCart } from "./cart.js";
 import { hasUserToken } from './utils.js';
 
 if(!hasUserToken()){
-    window.location.href ="../html/login.html";
+    window.location.href ="./login.html";
 }
 
 let orderCount = JSON.parse(localStorage.getItem('orderCount')) || 0;
@@ -23,12 +23,13 @@ if (orderDisplay){
         const products = cart;
 
         await addOrder(firstName, surname, email, city, products, calculateCartPrice())
-        window.location.href="../html/index.html";
+        window.location.href="./index.html";
     })
 }
 
 async function addOrder(firstName, surname, email, city, products, price){
-    const res = await fetch(`http://backend:3000/orders/${JSON.parse(localStorage.getItem('userId'))}`,{
+    console.log("I am in here where does it print?")
+    const res = await fetch(`http://localhost:3000/orders/${JSON.parse(localStorage.getItem('userId'))}`,{
         method: 'POST',
         headers: {
         'Content-Type': 'application/json',
@@ -38,7 +39,7 @@ async function addOrder(firstName, surname, email, city, products, price){
 }
 
 export async function removeOrderById(orderId) {
-    const res = await fetch(`http://backend:3000/orders/rmv/order`,{
+    const res = await fetch(`http://localhost:3000/orders/rmv/order`,{
         method: 'POST',
         headers: {
         'Content-Type': 'application/json',
@@ -55,7 +56,7 @@ export async function removeOrderById(orderId) {
 
 
 export async function findUserOrders(){
-    const res = await fetch(`http://backend:3000/orders/view/${JSON.parse(localStorage.getItem('userId'))}`,{
+    const res = await fetch(`http://localhost:3000/orders/view/${JSON.parse(localStorage.getItem('userId'))}`,{
         method: 'GET',
         headers: {
         'Content-Type': 'application/json',

@@ -11,7 +11,7 @@ async function userLogin(){
 		const password = document.querySelector('.js-login-password').value;
 		const queryResult = await isAccountRegistered(name,password)
 		if(queryResult){
-			window.location.href = '../html/index.html'
+			window.location.href = './index.html'
 		}
 		else{
 			console.log("Try Again!");
@@ -20,8 +20,9 @@ async function userLogin(){
 }
 	
 async function isAccountRegistered(name, password) {
+	console.log("Fuck off bitch");
 	try {
-		const response = await fetch("http://backend:3000/users/login-user", {
+		const response = await fetch("http://localhost:3000/users/login-user", {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -49,13 +50,15 @@ async function isAccountRegistered(name, password) {
 }
 
 export async function registerAccount(name, password) {
-	const response = await fetch("http://backend:3000/users/register-user", {
+	const response = await fetch("http://localhost:3000/users/register-user", {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
 		},
 		body: JSON.stringify({ name, password })
 	});
+
+	console.log("Passed?");
 
 	// Check if the response is okay (status 200-299)
 	if (!response.ok) {
@@ -65,9 +68,4 @@ export async function registerAccount(name, password) {
 	// Parse the response as JSON
 	const result = await response.json();
 	return result.success; // `success` is the property you sent back from the server
-}
-
-
-function saveAccounts(){
-	localStorage.setItem('registeredAccounts', JSON.stringify(registered_accounts));
 }

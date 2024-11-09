@@ -1,9 +1,9 @@
-import { productById } from '../data/products.js';
+import { productById } from './products.js';
 import { findUserOrders, removeOrderById} from './order.js'
 import { hasUserToken } from './utils.js';
 
 if(!hasUserToken()){
-    window.location.href ="../html/login.html";
+    window.location.href ="./login.html";
 }
 
 const viewDisplay = document.querySelector('.js-view-order-display');
@@ -13,11 +13,10 @@ if(viewDisplay){
 }
 
 async function displayOrders(){
-    console.log("In display!")
     const userOrders = await findUserOrders();
-    console.log(userOrders);
     let displayHTML = ''
     userOrders.forEach( order => {
+        console.log(order)
         
         displayHTML += `
         <div class="js-order-container-${order.orderId}">
