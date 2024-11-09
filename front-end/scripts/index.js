@@ -1,14 +1,16 @@
 import { cart, addToCart, totalCartQuantity } from "./cart.js";
-import { displayProducts as products } from "./products.js";
+import { loadDisplayProducts, displayProducts as initialProducts } from "./products.js";
 
-const basaImageURL = "http://localhost:3000/images"
+const basaImageURL = "http://localhost:3000/images";
 let cartQuantity = -1;
+let filteredProducts = initialProducts; // New variable to hold filtered products
+let debounceTimer;
 
 async function displayProducts() {
     let displayProductsHTML = '';
 
-
-    products.forEach((product) => {
+    // Use `filteredProducts` instead of `products` for rendering
+    filteredProducts.forEach((product) => {
         displayProductsHTML += `
             <div class="product-container">
                 <div class="product-inner-container">
@@ -47,38 +49,56 @@ async function displayProducts() {
                 const quantity = Number(document.querySelector(`.js-selector-quantity-${productId}`).value);
                 let success = await addToCart(productId, quantity);
                 if (success)
-                    updateCartQuantity(quantity)
+                    updateCartQuantity(quantity);
             });
-
-            
         });
+    
+    // Search button event listener
+    const searchInput = document.querySelector('.js-search-input');
+    searchInput.addEventListener('input', async () => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(async() => {
+            let nameSearch = document.querySelector('.js-search-input').value;
+            await searchExpression(nameSearch)
+        }, 700);
+    });
+
+    searchInput .addEventListener('keydown', async (event) => {
+        if (event.key === 'Enter') {
+            clearTimeout(debounceTimer);
+            let nameSearch = document.querySelector('.js-search-input').value;
+            await searchExpression(nameSearch)
+        }
+    });
 
     document.querySelector('.js-user-greetings').innerHTML = `Hello ${JSON.parse(localStorage.getItem('user'))}`;
 
-    const cartButton = document.querySelector('.js-cart-quantity')
-    cartButton.addEventListener('click', (button) => {
-        fetch(`http://localhost:3000/cart/${JSON.parse(localStorage.getItem('userId'))}`,{
+    const cartButton = document.querySelector('.js-cart-quantity');
+    cartButton.addEventListener('click', () => {
+        fetch(`http://localhost:3000/cart/${JSON.parse(localStorage.getItem('userId'))}`, {
             method: 'POST',
             headers: {
-            'Content-Type': 'application/json',
+                'Content-Type': 'application/json',
             },
-            body: JSON.stringify({cart})
-        })  
-    })
-    
+            body: JSON.stringify({ cart }),
+        });
+    });
 }
 
 displayProducts();
 updateCartQuantity();
 
-export function updateCartQuantity(quantity){
-    
-    const cartButton = document.querySelector('.js-cart-quantity')
-    if(cartQuantity == -1){
-        cartQuantity = totalCartQuantity()
-    }
-    else{
-        cartQuantity += quantity
+export function updateCartQuantity(quantity) {
+    const cartButton = document.querySelector('.js-cart-quantity');
+    if (cartQuantity == -1) {
+        cartQuantity = totalCartQuantity();
+    } else {
+        cartQuantity += quantity;
     }
     cartButton.innerHTML = cartQuantity;
+}
+
+async function searchExpression(expression){
+    filteredProducts = await loadDisplayProducts(expression); // Update filteredProducts
+    displayProducts();
 }

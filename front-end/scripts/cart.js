@@ -36,20 +36,7 @@ function displayCart(){
             button.addEventListener('click', async () => {
                 const idToRemove = button.dataset.productId;
 
-                const res = await fetch(`http://localhost:3000/cart/rmv/${JSON.parse(localStorage.getItem('userId'))}-${idToRemove}`,{
-                    method: 'GET',
-                    headers: {
-                    'Content-Type': 'application/json',
-                    },
-                });
-
-                const data = await res.json();
-
-                cart = data.cart
-                
-
-                //removeItemFromCart(idToRemove);
-                //saveCart()
+                await removeItemFromCart(idToRemove);
                 displayCart();
             })
         })
@@ -70,13 +57,8 @@ function displayCart(){
                             const newQuantity = Number(document.querySelector(`.js-new-quantity-${productId}`).value);
                             const cartItem = cart[findItemIndexFromProductId(productId)]
                             if(newQuantity == 0){
-                                //Make the remove fetch a function and call it here!
-                                //removeItemFromCart(productId);
-                            } else if (newQuantity < 0){
-                                onUpdate.innerHTML='';
-                                return;
-                            } else {
-                                onUpdate.innerHTML='';
+                                await removeItemFromCart(productId);
+                            } else if (newQuantity > 0) {
                                 const res = await fetch(`http://localhost:3000/cart/upt/${JSON.parse(localStorage.getItem('userId'))}-${productId}`,{
                                     method: 'POST',
                                     headers: {
@@ -86,14 +68,12 @@ function displayCart(){
                                 });
                                 
                                 const data = await res.json();
-
                                 cart = data.success ? data.cart : cart;
                             }
-
+                            onUpdate.innerHTML='';
                             displayCart();
                 })
             })
-
     })
 
     document.querySelector('.js-cart-price').innerHTML = calculateCartPrice();
@@ -103,17 +83,20 @@ function displayCart(){
                 window.location.href = "./order.html";
             }
         })
-    
 }
 
-function removeItemFromCart(cart, productId) {
-    const index = findItemIndexFromProductId(cart, productId);
-    if (index !== -1) {  // Check if the item exists
-        cart.splice(index, 1);  // Remove the item from the cart
-    }
+async function removeItemFromCart(productId) {
+    const res = await fetch(`http://localhost:3000/cart/rmv/${JSON.parse(localStorage.getItem('userId'))}-${productId}`,{
+        method: 'GET',
+        headers: {
+        'Content-Type': 'application/json',
+        },
+    });
+    const data = await res.json();
+    cart = data.cart
 }
 
-function findItemIndexFromProductId(cart, productId) {
+function findItemIndexFromProductId(productId) {
     for (let i = 0; i < cart.length; i++) {
         if (cart[i].productId === productId) {
             return i;  // Return the index of the item
@@ -122,21 +105,11 @@ function findItemIndexFromProductId(cart, productId) {
     return -1;  // Return -1 if not found
 }
 
-function findProductInCart(cart, productId) {
-    for (const item of cart) {
-        if (item.productId === productId) {
-            return item;
-        }
-    }
-    return false;
-}
-
 export function totalCartQuantity() {
     let totalQuantity = 0;
     for (const item of cart){
         totalQuantity += item.quantity;
     }
-
     return totalQuantity;
 }
 
@@ -167,7 +140,6 @@ export async function addToCart(productId, quantity){
 
     if(data.message === "quantity"){
         console.log("The quantity is at false!");
-        
     }
     return false;
 }
@@ -208,6 +180,4 @@ export async function cleanCart(){
     } else {
         console.error("Something went wrong with cart cleanup!")   
     }
-
-
 }

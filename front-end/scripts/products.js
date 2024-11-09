@@ -1,4 +1,4 @@
-export const displayProducts = await loadDisplayProducts();
+export let displayProducts = await loadDisplayProducts('');
 export const allProducts = await loadAllProducts();
  
 export function productById(productId){
@@ -10,20 +10,21 @@ export function productById(productId){
     return products[1];
 }
 
-export async function loadDisplayProducts() {
+export async function loadDisplayProducts(expression) {
     try {
         const res = await fetch("http://localhost:3000/products/display-product-list", {
-            method: 'GET',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
+            body:JSON.stringify({expression})
         });
 
         if (!res.ok) {
             throw new Error(`Error fetching products: ${res.status} ${res.statusText}`);
         }
 
-        const data = await res.json();
+        let data = await res.json();
         return data.products;
 
     } catch (error) {
@@ -45,7 +46,7 @@ export async function loadAllProducts() {
             throw new Error(`Error fetching products: ${res.status} ${res.statusText}`);
         }
 
-        const data = await res.json();
+        let data = await res.json();
         return data.products;
 
     } catch (error) {
