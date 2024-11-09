@@ -1,5 +1,5 @@
 import { cart, addToCart, totalCartQuantity } from "./cart.js";
-import { products } from "./products.js";
+import { displayProducts as products } from "./products.js";
 
 const basaImageURL = "http://localhost:3000/images"
 let cartQuantity = -1;
