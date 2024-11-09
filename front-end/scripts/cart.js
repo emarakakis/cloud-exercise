@@ -1,5 +1,5 @@
 import { productById } from "./products.js";
-import { hasUserToken } from './utils.js';
+import { hasUserToken } from './login.js';
 
 export let cart = await loadUserCart()
 
@@ -68,7 +68,6 @@ function displayCart(){
                             const productId = button.dataset.productId;
                             const onUpdate = document.querySelector(`.js-on-quantity-update-${productId}`);
                             const newQuantity = Number(document.querySelector(`.js-new-quantity-${productId}`).value);
-                            console.log(typeof newQuantity)
                             const cartItem = cart[findItemIndexFromProductId(productId)]
                             if(newQuantity == 0){
                                 //Make the remove fetch a function and call it here!
@@ -187,17 +186,13 @@ async function loadUserCart(){
     const cartRet = data.cartProducts;
 
     if(!cartRet){
-        console.log("New!")
         return []
     }
     
     else{
-        console.log("Old!");
         return cartRet;
     }
 }
-
-
 
 export async function cleanCart(){
     const res = await fetch(`http://localhost:3000/cart/cln/${JSON.parse(localStorage.getItem('userId'))}`,{

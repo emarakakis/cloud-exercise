@@ -19,7 +19,6 @@ export async function loadDisplayProducts() {
             },
         });
 
-        // Check if the response is successful
         if (!res.ok) {
             throw new Error(`Error fetching products: ${res.status} ${res.statusText}`);
         }
@@ -42,7 +41,6 @@ export async function loadAllProducts() {
             },
         });
 
-        // Check if the response is successful
         if (!res.ok) {
             throw new Error(`Error fetching products: ${res.status} ${res.statusText}`);
         }

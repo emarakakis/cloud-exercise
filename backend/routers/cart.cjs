@@ -20,7 +20,7 @@ router.post("/:userId", async (req, res) => {
         if (results[0]){
             const existingQuantity = results[0].quantity;
             const newQuantity = existingQuantity + productAdded.quantity;
-            console.log("Already in!");
+
             await db.query(
                 `UPDATE \`${table_name}\` SET quantity = ? WHERE productId = ?`, 
                 [newQuantity, productAdded.productId]
@@ -29,7 +29,6 @@ router.post("/:userId", async (req, res) => {
         }
 
         else {
-            console.log("New Addition!");
             await db.query(
                 `INSERT INTO \`${table_name}\` (productId, quantity) VALUES (?, ?)`,
                 [productAdded.productId, productAdded.quantity]
@@ -70,8 +69,6 @@ router.get("/:userId", async (req, res) => {
                 res.json({ success: false, message: "Cart is empty" });
             }
         } else {
-            // If the table doesn't exist, create it
-            console.log("Big dog!");
             await db.query(`CREATE TABLE \`${tableName}\` (productId INT PRIMARY KEY, quantity INT)`);
             res.json({ success: true, message: "Cart table created" });
         }
@@ -83,11 +80,10 @@ router.get("/:userId", async (req, res) => {
 });
 
 router.get("/rmv/:userId-:productId", async (req, res) =>{
+
     const userId = req.params.userId;
     const productId = req.params.productId;
-
     const tableName = `cart-${userId}`
-    console.log("I am here!")
 
     try {
         const [results] = await db.query(`SELECT * FROM \`${tableName}\` WHERE productId = ?`, [productId])
@@ -100,8 +96,9 @@ router.get("/rmv/:userId-:productId", async (req, res) =>{
             res.json( {success: false})
         }
 
-    } catch {
-        console.log("Fuck off biatch");
+    } catch (error) {
+        console.error("Database error:", error);
+        res.status(500).json({ success: false, message: "database" });
     }
 })
 
@@ -129,9 +126,9 @@ router.post("/upt/:userId-:productId", async(req, res) => {
             res.json({success : false})
         }
 
-
-    } catch {
-
+    } catch (error) {
+        console.error("Database error:", error);
+        res.status(500).json({ success: false, message: "database" });
     }
 })
 
@@ -143,7 +140,6 @@ router.get("/cln/:userId", async (req, res) => {
         await db.query(`TRUNCATE \`${tableName}\``);
         res.json({success: true})
     } catch {
-        console.log("Wtf went wrong here");
         res.json({success: false})
     }
 

@@ -1,6 +1,6 @@
 import { cart, calculateCartPrice, cleanCart } from "./cart.js";
 //export let orders = await loadOrders()
-import { hasUserToken } from './utils.js';
+import { hasUserToken } from './login.js';
 
 if(!hasUserToken()){
     window.location.href ="./login.html";
@@ -28,7 +28,6 @@ if (orderDisplay){
 }
 
 async function addOrder(firstName, surname, email, city, products, price){
-    console.log("I am in here where does it print?")
     const res = await fetch(`http://localhost:3000/orders/${JSON.parse(localStorage.getItem('userId'))}`,{
         method: 'POST',
         headers: {
@@ -47,11 +46,8 @@ export async function removeOrderById(orderId) {
         body : JSON.stringify({orderId})
     });
 
-    console.log("Out of remove!");
     const data = await res.json()
-    
     return data.orders;    
-    
 }
 
 

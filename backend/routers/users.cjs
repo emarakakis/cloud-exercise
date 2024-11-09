@@ -6,7 +6,6 @@ const { route } = require("./orders.cjs");
 
 router.post("/login-user", async(req, res) => {
     const { name, password } = req.body;
-    console.log(name, password); // Ensure this prints the database connection object
 
     try{
         const [results] = await db.query("SELECT * FROM users WHERE name = ? AND password = ?",
@@ -15,7 +14,6 @@ router.post("/login-user", async(req, res) => {
         if (results.length > 0) {
             res.json({ success: true, userId: results[0].USERID });
         } else {
-            console.log("User not found.");
             res.json({ success: false });
         }
     }

@@ -74,7 +74,6 @@ updateCartQuantity();
 export function updateCartQuantity(quantity){
     
     const cartButton = document.querySelector('.js-cart-quantity')
-    console.log(cartQuantity + quantity)
     if(cartQuantity == -1){
         cartQuantity = totalCartQuantity()
     }

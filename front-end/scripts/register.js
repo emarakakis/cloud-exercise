@@ -14,5 +14,4 @@ document.querySelector('.js-register-button')
         if(res){
             window.location.href = "./login.html";
         }
-        
     })

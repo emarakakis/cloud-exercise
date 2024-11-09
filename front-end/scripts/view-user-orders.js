@@ -1,6 +1,6 @@
 import { productById } from './products.js';
 import { findUserOrders, removeOrderById} from './order.js'
-import { hasUserToken } from './utils.js';
+import { hasUserToken } from './login.js';
 
 if(!hasUserToken()){
     window.location.href ="./login.html";
@@ -16,7 +16,6 @@ async function displayOrders(){
     const userOrders = await findUserOrders();
     let displayHTML = ''
     userOrders.forEach( order => {
-        console.log(order)
         
         displayHTML += `
         <div class="js-order-container-${order.orderId}">
@@ -38,7 +37,6 @@ async function displayOrders(){
     document.querySelectorAll('.js-order-items-container')
         .forEach( (itemContainer) => {
             const cartProducts = JSON.parse(itemContainer.dataset.products);
-            console.log(cartProducts);
             cartProducts.forEach( item => {
                 itemContainer.innerHTML += `<p>${productById(item.productId).name} Quantity: ${item.quantity}</p>`
             })  
@@ -48,10 +46,8 @@ async function displayOrders(){
         .forEach( (button) => {
             button.addEventListener('click', async () => {
                 const orderId = button.dataset.orderId;
-                console.log("Pressed the button");
                 await removeOrderById(orderId);
-                console.log("Out of the async");
-                window.location.href = "."
+                await displayOrders();
             })
         })
 }

@@ -9,8 +9,7 @@ router.get('/view/:userId', async (req, res) =>{
     {
         const [userOrders] = await userDB.query("SELECT * FROM orders WHERE userId = ?", [userId])
         const [products] = await productDB.query("SELECT * FROM products")
-        console.log(products);
-        console.log(userOrders);
+
         for(const order of userOrders){
             const tableName = `products-${order.orderId}`
             const [orderProducts] = await userDB.query(`SELECT * FROM \`${tableName}\``)
@@ -19,13 +18,13 @@ router.get('/view/:userId', async (req, res) =>{
         }
 
         res.json({success:true, orders: userOrders});
-    } catch {
-        console.log("Fuck me in the ass");
+    } catch (error) {
+        console.error("Database error:", error);
+        res.status(500).json({ success: false, message: "database" });
     }
 })
 
 router.post('/:userId', async (req, res) => {
-    console.log("Got in little bitch!");
     const userId = req.params.userId;
     const { firstName, surname, email, city, products, price } = req.body;
 
@@ -35,9 +34,10 @@ router.post('/:userId', async (req, res) => {
                 VALUES (?, ?, ?, ?, ?, ?)`, 
                 [userId, firstName, surname, email, price, city]
             );
+
             const orderId = result[0].insertId;
-            console.log(orderId)
             const orderProducts = `products-${orderId}`;
+
             await userDB.query(
                 `UPDATE orders SET products = ? WHERE orderId = ?`,
                 [orderProducts, orderId]
@@ -46,10 +46,9 @@ router.post('/:userId', async (req, res) => {
             await userDB.query(`RENAME TABLE \`${cartTableName}\` TO \`${orderProducts}\``)
 
             updateProductQuantity(products)
-
             res.json({success:true});
 
-        }     catch (error) {
+        } catch (error) {
             console.error("Database error:", error);
             res.status(500).json({ success: false, message: "Database error occurred" });
         }
@@ -66,10 +65,9 @@ router.post("/rmv/order", async(req, res) => {
         for(const product of order){
             product.quantity *= -1;
         }
+        
         await updateProductQuantity(order);
         await userDB.query(`DROP TABLE \`${tableName}\``)
-        console.log("Finished remove!");
-
         res.json({success:true})
 
     } catch (error) {

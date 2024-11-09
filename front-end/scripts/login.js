@@ -14,13 +14,12 @@ async function userLogin(){
 			window.location.href = './index.html'
 		}
 		else{
-			console.log("Try Again!");
+			//Need to pop up a message that he needs to try again!
 		}
 	})
 }
 	
 async function isAccountRegistered(name, password) {
-	console.log("Fuck off bitch");
 	try {
 		const response = await fetch("http://localhost:3000/users/login-user", {
 			method: 'POST',
@@ -36,7 +35,6 @@ async function isAccountRegistered(name, password) {
 
 		const data = await response.json(); // Parse the response as JSON
 		if (data.success){
-			console.log(data.userId);
 			localStorage.setItem('userId', JSON.stringify(data.userId));
 			localStorage.setItem('user', JSON.stringify(name));
 		}
@@ -58,14 +56,20 @@ export async function registerAccount(name, password) {
 		body: JSON.stringify({ name, password })
 	});
 
-	console.log("Passed?");
-
-	// Check if the response is okay (status 200-299)
 	if (!response.ok) {
 		throw new Error('Network response was not ok');
 	}
 
-	// Parse the response as JSON
 	const result = await response.json();
-	return result.success; // `success` is the property you sent back from the server
+	return result.success;
+}
+
+export function hasUserToken(){
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    if(!user){
+        return false;
+    } else {
+        return true;
+    }
 }
