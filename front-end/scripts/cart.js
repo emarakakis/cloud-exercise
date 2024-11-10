@@ -9,6 +9,7 @@ if(!hasUserToken()){
 let displayHTML = ''
 
 const displayProducts = document.querySelector('.js-cart-display');
+const basaImageURL = "http://localhost:3000/images";
 
 if(displayProducts){
     displayCart()
@@ -21,12 +22,21 @@ function displayCart(){
         
         displayHTML += 
         `
-            <div class = "cart-product js-cart-product-${item.productId}">
-                <p>${curProduct.name} : Quantity : ${item.quantity}</p>
+        <div class="cart-product js-cart-product-${item.productId}">
+            <img class="item-image" src="${basaImageURL}/${curProduct.image}" alt="${curProduct.name}">
+            
+            <div class="product-details">
+                <p class="product-name">${curProduct.name}</p>
+                <p class="product-quantity">Quantity: ${item.quantity}</p>
+            </div>
+            
+            <div class="product-controls">
                 <button class="js-remove-item" data-product-id="${item.productId}">Remove</button>
                 <button class="js-update-quantity" data-product-id="${item.productId}">Update</button>
                 <div class="js-on-quantity-update-${item.productId}"></div>
             </div>
+        </div>
+
         `
     })
     displayProducts.innerHTML = displayHTML;
@@ -46,6 +56,10 @@ function displayCart(){
             button.addEventListener('click', () => {
                 const productId = button.dataset.productId;
                 const onUpdate = document.querySelector(`.js-on-quantity-update-${productId}`);
+                if(onUpdate.innerHTML != ''){
+                    onUpdate.innerHTML = '';
+                    return;
+                }
                 onUpdate.innerHTML = `
                     <input type='text' placeholder="New Quantity" class="js-new-quantity-${productId}">
                     <button class="js-quantity-save-${productId}"">Save</button>
@@ -56,9 +70,7 @@ function displayCart(){
                             const onUpdate = document.querySelector(`.js-on-quantity-update-${productId}`);
                             const newQuantity = Number(document.querySelector(`.js-new-quantity-${productId}`).value);
                             const cartItem = cart[findItemIndexFromProductId(productId)]
-                            if(newQuantity == 0){
-                                await removeItemFromCart(productId);
-                            } else if (newQuantity > 0) {
+                            if (newQuantity > 0) {
                                 const res = await fetch(`http://localhost:3000/cart/upt/${JSON.parse(localStorage.getItem('userId'))}-${productId}`,{
                                     method: 'POST',
                                     headers: {

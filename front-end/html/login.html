@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Login Page</title>
-        <link rel="stylesheet" href="../styles/login.css">
-    </head>
-    <body>
-        <input placeholder="Name" class="js-login-name"><br><br>
-        <input type="password" placeholder="Password" class="js-login-password"><br><br>
-        <button class="js-login-button">Login</button>
-        <a href="./register.html">
-            <button class="register-button">Register</button>
-        </a>
-        <script type="module" src="../scripts/login.js"></script>
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="../styles/login.css">
+</head>
+<body>
+    <div class="container">
+        <div class="login-form">
+            <h2>Login</h2>
+            <input placeholder="Name" class="js-login-name" type="text"><br><br>
+            <input type="password" placeholder="Password" class="js-login-password"><br><br>
+            <button class="js-login-button">Login</button>
+            <p>Don't have an account? <a href="./register.html">Register here</a></p>
+        </div>
+    </div>
+    <script type="module" src="../scripts/login.js"></script>
+</body>
 </html>

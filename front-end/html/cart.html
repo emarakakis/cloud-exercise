@@ -7,6 +7,25 @@
     <link rel="stylesheet" href="../styles/cart.css">
 </head>
 <body>
+    <div class="navigation-bar">
+        <div class="left-bar">
+            <a  onclick="
+                localStorage.setItem('user', JSON.stringify(''))
+                localStorage.setItem('userId', JSON.stringify(''))
+                "href="./login.html"><button class="header-button">Logout</button></a>
+        
+            <p class="user-greetings js-user-greetings">Welcome User!</p>
+        </div>
+        
+        <div>
+            <button class="header-button" onclick = "window
+                window.location.href=`./index.html`
+            ">Store</button>
+            <button class="header-button" onclick="
+            window.location.href=`./view-user-orders.html`">Orders</button>    
+        </div>
+    </div>
+
     <div class = "cart-display js-cart-display">
         <div class = "cart-product js-cart-product">
         </div>
@@ -17,7 +36,7 @@
             <p>The total price is:</p>
             <p class="js-cart-price"></p>
         </a>
-        <button class="js-order-button">Order</button>
+        <button class="order-button js-order-button">Order</button>
     </div>
     <script type="module" src="../scripts/cart.js"></script>
 </body>

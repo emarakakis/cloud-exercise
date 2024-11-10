@@ -1,0 +1,148 @@
+/* General Body Styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: rgb(230,230,250);
+}
+
+.cart-display {
+    margin-top: 90px;
+}
+
+/* Cart Container */
+.cart-product {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background-color: gray;
+    border-radius: 5px;
+    gap: 20px;
+    transition: background-color 0.3s;
+}
+
+/* Image Styling */
+.item-image {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    border-radius: 10px;
+    margin-right: 20px; /* Adds space between image and details */
+}
+
+/* Product Details */
+.product-details {
+    flex: 1; /* Expands to take available space */
+    max-width: 300px; /* Set a max width to prevent overflow */
+}
+
+.product-name {
+    font-weight: bold;
+    font-size: 18px;
+    margin: 0;
+}
+
+.product-quantity {
+    font-size: 16px;
+    margin-top: 5px;
+    color: #555;
+}
+
+/* Controls */
+
+.product-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* Space between buttons */
+}
+
+.order-button,
+.product-controls button {
+    padding: 8px 10px;
+    font-size: 14px;
+    border: none;
+    background-color: #ff5722;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.product-controls button:hover {
+    background-color: #e64a19;
+}
+
+/* Cart Total Price Section */
+.cart-total-price {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    margin-top: 20px;
+    background-color: #ffecb3;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 20px;
+    color: #333;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navigation-bar{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    height: 50px;
+    background-color: gray;
+    align-self: top;
+    position:fixed;
+    top: 0; left: 0; z-index: 9999; width: 100%; height: 50px;
+    box-shadow: 0 5px 5px rgb(0, 0, 0, 0.5) ;
+    gap: 15px;
+}
+
+.header-button{
+    display: inline-block;
+    width: 80px;
+    height: 35px;
+    border-radius: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    border:solid;
+    border-width: 1px;
+    font-weight: bold;
+    background-color: bisque;
+    cursor: pointer;
+    transition: opacity 0.6s;  
+    align-self: center; 
+}
+
+.header-button:hover{
+    opacity: 0.6;
+}
+
+.header-button, .user-greetings{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 35px; /* Ensure buttons are of equal height */
+    margin: 0 10px; /* Centering spacing for buttons */
+}
+
+
+.user-greetings{
+    display: inline-block;
+    color: blanchedalmond;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.cart-quantity{
+    display: inline-block;
+    font-size: 20px;
+}
+
+.cart-button{
+    width: 140px;
+}

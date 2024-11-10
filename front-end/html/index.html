@@ -7,21 +7,26 @@
     <title>E-Shop</title>
 </head>
 <body>
-    <header>
-        <a class="header-button" onclick="
+    <div class="navigation-bar">
+        <div class="left-bar">
+            <a  onclick="
                 localStorage.setItem('user', JSON.stringify(''))
                 localStorage.setItem('userId', JSON.stringify(''))
-            "href="./login.html"><button>Logout</button></a>
+                "href="./login.html"><button class="header-button">Logout</button></a>
         
-        <p class="user-greetings js-user-greetings">Hello User!</p>
-        <div>
-            <input placeholder="Enter game's name" class="js-search-input">
+            <p class="user-greetings js-user-greetings">Welcome User!</p>
         </div>
+
+        <input class="search-bar js-search-input" placeholder="Enter game's name">
+        
         <div>
-             <a class="header-button js-cart-quantity" href="./cart.html"><button>Cart</button></a>
-            <a class="header-button" href="./view-user-orders.html"><button>Orders</button></a>    
+            <button class="header-button cart-button" onclick = "window
+                window.location.href=`./cart.html`
+            ">Cart:  <a class="cart-quantity js-cart-quantity"></a>  items!</button>
+            <button class="header-button" onclick="
+            window.location.href=`./view-user-orders.html`">Orders</button>    
         </div>
-    </header>
+    </div>
 
     <div class="display-products js-display-products">
     </div>

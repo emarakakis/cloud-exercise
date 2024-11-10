@@ -16,23 +16,27 @@ async function displayProducts() {
                 <div class="product-inner-container">
                     <div class="product-information">
                         <img class="product-image" src="${basaImageURL}/${product.image}">
-                        <p class="product-name">${product.name}</p>
-                        <p class="price">${(product.priceCents / 100).toFixed(2)}$</p>
+                        <div>
+                            <p class="product-name">${product.name}</p>
+                            <p class="price">${(product.priceCents / 100).toFixed(2)}$</p>
+                        </div>
                     </div>
                 </div> 
                 <div class="product-purchase-information">
-                    <p>Quantity</p>
-                    <select class="js-selector-quantity-${product.id}">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                    </select>
+                    <div>
+                        <p class = "quantity-text">Quantity</p>
+                        <select class="quantity-selector js-selector-quantity-${product.id}">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                        </select>
+                    </div>
                     <button class="buy-button js-buy-button" data-product-id="${product.id}">Buy</button>
                 </div>
             </div>
@@ -71,7 +75,7 @@ async function displayProducts() {
         }
     });
 
-    document.querySelector('.js-user-greetings').innerHTML = `Hello ${JSON.parse(localStorage.getItem('user'))}`;
+    document.querySelector('.js-user-greetings').innerHTML = `Welcome ${JSON.parse(localStorage.getItem('user'))}`;
 
     const cartButton = document.querySelector('.js-cart-quantity');
     cartButton.addEventListener('click', () => {
