@@ -99,7 +99,7 @@ export function updateCartQuantity(quantity) {
     } else {
         cartQuantity += quantity;
     }
-    cartButton.innerHTML = cartQuantity;
+    cartButton.innerHTML = `   ${cartQuantity} `;
 }
 
 async function searchExpression(expression){

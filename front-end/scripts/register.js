@@ -13,5 +13,9 @@ document.querySelector('.js-register-button')
 
         if(res){
             window.location.href = "./login.html";
+        } else {
+            document.querySelector('.js-account-name').value = '';
+            document.querySelector('.js-account-password').value = '';
+            window.alert('Error, Username is already in! try again!');
         }
     })

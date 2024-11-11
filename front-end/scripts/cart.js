@@ -81,6 +81,10 @@ function displayCart(){
                                 
                                 const data = await res.json();
                                 cart = data.success ? data.cart : cart;
+                            
+                                if(data.message === "quantity"){
+                                    window.alert(`Can only purchase ${data.quantity} amount of this product.\nTry again!`);
+                                }
                             }
                             onUpdate.innerHTML='';
                             displayCart();
@@ -151,7 +155,7 @@ export async function addToCart(productId, quantity){
     }
 
     if(data.message === "quantity"){
-        console.log("The quantity is at false!");
+        window.alert(`Can only add ${data.quantity} more of this product.\nTry again!`);
     }
     return false;
 }

@@ -7,6 +7,25 @@
     <link rel="stylesheet" href="../styles/view-user-orders.css">
 </head>
 <body>
+    <div class="navigation-bar">
+        <div class="left-bar">
+            <a  onclick="
+                localStorage.setItem('user', JSON.stringify(''))
+                localStorage.setItem('userId', JSON.stringify(''))
+                "href="./login.html"><button class="header-button">Logout</button></a>
+        
+        <a href="./index.html"><p class="user-greetings js-user-greetings">Welcome User!</p></a>
+        </div>
+        
+        <div>
+            <button class="header-button" onclick = "window
+                window.location.href=`./index.html`
+            ">Store</button>
+            <button class="header-button" onclick="
+            window.location.href=`./cart.html`">Cart</button>    
+        </div>
+    </div>
+
     <div class="js-view-order-display">
         <div class="js-view-order-container">
         </div>

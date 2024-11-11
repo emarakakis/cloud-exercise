@@ -11,7 +11,9 @@ router.post("/:userId", async (req, res) => {
     try {
         const q = await checkProductQuantity(productAdded, userId, 0) 
         if (!q){
-            res.json({success:false, message:"quantity"})
+            const [remainderQuantity] = await productdb.query(`SELECT quantity FROM productquantity WHERE id = ?`, [productAdded.productId])
+            const [cartQuantity] = await db.query(`SELECT quantity FROM  \`${table_name}\` WHERE productId = ?`, [productAdded.productId])
+            res.json({success:false, message:"quantity", quantity: remainderQuantity[0].quantity - cartQuantity[0].quantity})
             return;
         }
         
@@ -114,7 +116,8 @@ router.post("/upt/:userId-:productId", async(req, res) => {
 
             const q = await checkProductQuantity({productId: productId, quantity: newQuantity}, userId, 1);
             if (!q){
-                res.json({success:false, message:"quantity"})
+                const [remainderQuantity] = await productdb.query(`SELECT quantity FROM productquantity WHERE id = ?`, [productId])
+                res.json({success:false, message:"quantity", quantity: remainderQuantity[0].quantity})
                 return;
             }
 

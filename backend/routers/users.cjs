@@ -7,7 +7,7 @@ const { route } = require("./orders.cjs");
 router.post("/login-user", async(req, res) => {
     const { name, password } = req.body;
 
-    try{
+    try{ 
         const [results] = await db.query("SELECT * FROM users WHERE name = ? AND password = ?",
         [name, password]);
 
@@ -27,6 +27,15 @@ router.post("/register-user", async (req, res) => {
     const { name, password } = req.body;
 
     try {
+        const [users] = await db.query(`SELECT * FROM users`);
+        console.log(users)
+        const [ex] = await db.query(`SELECT EXISTS(SELECT * FROM users WHERE NAME = ?) AS userExists`, [name]);
+        console.log(ex[0].userExists)
+        if (ex[0].userExists) {
+            res.json({ success: false, message: "User registration failed" });
+            return;
+        }
+        
         const [result] = await db.query("INSERT INTO users (name, password) VALUES (?, ?)", [name, password]);
         
         // Check if the insert was successful

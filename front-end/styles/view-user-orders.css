@@ -1,10 +1,3 @@
-/* Basic Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 /* Body */
 body {
     font-family: Arial, sans-serif;
@@ -28,6 +21,7 @@ body {
 
 /* Order container */
 .js-order-container {
+    margin-top: 30px;
     margin-bottom: 2rem;
     padding: 20px;
     background-color: #fafafa;
@@ -95,4 +89,63 @@ body {
 
 .js-button-remove-order:hover {
     background-color: #c0392b;
+}
+
+.navigation-bar{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    height: 50px;
+    background-color: gray;
+    align-self: top;
+    position:fixed;
+    top: 0; left: 0; z-index: 9999; width: 100%; height: 50px;
+    box-shadow: 0 5px 5px rgb(0, 0, 0, 0.5) ;
+    gap: 15px;
+}
+
+.header-button{
+    display: inline-block;
+    width: 80px;
+    height: 35px;
+    border-radius: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    border:solid;
+    border-width: 1px;
+    font-weight: bold;
+    background-color: bisque;
+    cursor: pointer;
+    transition: opacity 0.6s;  
+    align-self: center; 
+}
+
+.header-button:hover{
+    opacity: 0.6;
+}
+
+.header-button, .user-greetings{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 35px; /* Ensure buttons are of equal height */
+    margin: 0 10px; /* Centering spacing for buttons */
+}
+
+
+.user-greetings{
+    display: inline-block;
+    color: blanchedalmond;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.cart-quantity{
+    display: inline-block;
+    font-size: 20px;
+}
+
+.cart-button{
+    width: 140px;
 }

@@ -14,7 +14,9 @@ async function userLogin(){
 			window.location.href = './index.html'
 		}
 		else{
-			//Need to pop up a message that he needs to try again!
+			console.log("helloo")
+			document.querySelector('.js-login-name').value = '';	
+			document.querySelector('.js-login-password').value = '';
 		}
 	})
 }
@@ -37,9 +39,13 @@ async function isAccountRegistered(name, password) {
 		if (data.success){
 			localStorage.setItem('userId', JSON.stringify(data.userId));
 			localStorage.setItem('user', JSON.stringify(name));
+			return data
+		}
+		else{
+			window.alert("User doesn't exist");
 		}
 		
-		return data
+		
 
 	} catch (error) {
 		console.error('There has been a problem with your fetch operation:', error);

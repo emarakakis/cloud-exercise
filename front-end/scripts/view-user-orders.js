@@ -25,7 +25,7 @@ async function displayOrders() {
             </div>
             <p>Information:</p>
             <div class="js-order-information">
-                <p>FirstName: ${order.firstName} Surname: ${order.surname} Email: ${order.email} City: ${order.city}<br> Price: ${order.price}</p>
+                <p>FirstName: ${order.firstName} Surname: ${order.lastName} Email: ${order.email} City: ${order.city}<br> Price: ${order.price}</p>
             </div>
             <button class="js-button-remove-order" data-order-id="${order.orderId}">Cancel Order</button>
         </div>

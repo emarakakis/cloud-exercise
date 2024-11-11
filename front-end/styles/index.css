@@ -22,7 +22,7 @@ body {
     display: grid; 
     grid-template-columns: repeat(4, 1fr); /* 4 equal columns */
     gap: 50px; /* Add some gap between grid items */
-    margin-top: 60px;
+    margin-top: 75px;
     margin-bottom: 20px;
     margin-left: 15px;
     margin-right: 15px;
