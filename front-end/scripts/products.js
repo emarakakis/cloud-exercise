@@ -25,6 +25,7 @@ export async function loadDisplayProducts(expression) {
         }
 
         let data = await res.json();
+        console.log(`Display ${data.products}`)
         return data.products;
 
     } catch (error) {
@@ -47,6 +48,7 @@ export async function loadAllProducts() {
         }
 
         let data = await res.json();
+        console.log(`All ${data.products}`)
         return data.products;
 
     } catch (error) {

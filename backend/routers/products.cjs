@@ -39,6 +39,7 @@ router.post("/display-product-list", async (req, res) => {
 router.get("/all-product-list", async (req, res) => {
     try{
         const [products] = await db.query("SELECT * FROM products")
+        console.log(products)
         if (products.length > 0) {
             res.json({ success: true, products: products });
         } else {
