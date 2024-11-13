@@ -1,7 +1,7 @@
 import { cart, addToCart, totalCartQuantity } from "./cart.js";
 import { loadDisplayProducts, displayProducts as initialProducts } from "./products.js";
 
-const basaImageURL = "http://localhost:3000/images";
+const basaImageURL = "/api/images";
 let cartQuantity = -1;
 let filteredProducts = initialProducts; // New variable to hold filtered products
 let debounceTimer;
@@ -79,7 +79,7 @@ async function displayProducts() {
 
     const cartButton = document.querySelector('.js-cart-quantity');
     cartButton.addEventListener('click', () => {
-        fetch(`http://localhost:3000/cart/${JSON.parse(localStorage.getItem('userId'))}`, {
+        fetch(`/api/cart/${JSON.parse(localStorage.getItem('userId'))}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

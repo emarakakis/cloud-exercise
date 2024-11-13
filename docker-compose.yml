@@ -1,16 +1,23 @@
 services:
   frontend:
     build: ./front-end
+    container_name: front-end
     ports:
       - "80:80"
     depends_on:
       - ordersDB
       - productsDB
+      - backend
+    networks:
+      - mynetwork  # Add this line to connect frontend to mynetwork
 
   backend:
     build: ./backend
+    container_name: backend
     ports:
       - "3000:3000"
+    networks:
+      - mynetwork
     depends_on:
       - ordersDB
       - productsDB
@@ -19,10 +26,12 @@ services:
     image: mysql:8
     container_name: orders_db
     environment:
-      MYSQL_ROOT_PASSWORD: 123  # Keep this, it's for the root password
-      MYSQL_DATABASE: orders    # The database to be created
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: orders
     ports:
       - "3308:3306"
+    networks:
+      - mynetwork
     volumes:
       - ./mysql-init/orders-init:/docker-entrypoint-initdb.d:ro
 
@@ -30,9 +39,15 @@ services:
     image: mysql:8
     container_name: products_db
     environment:
-      MYSQL_ROOT_PASSWORD: 123  # Keep this, it's for the root password
-      MYSQL_DATABASE: products  # The database to be created
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: products
     ports:
       - "3307:3306"
     volumes:
       - ./mysql-init/products-init:/docker-entrypoint-initdb.d:ro
+    networks:
+      - mynetwork  # Ensure each service is connected to mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge

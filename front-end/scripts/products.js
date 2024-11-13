@@ -12,7 +12,7 @@ export function productById(productId){
 
 export async function loadDisplayProducts(expression) {
     try {
-        const res = await fetch("http://localhost:3000/products/display-product-list", {
+        const res = await fetch("/api/products/display-product-list", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ export async function loadDisplayProducts(expression) {
 
 export async function loadAllProducts() {
     try {
-        const res = await fetch("http://localhost:3000/products/all-product-list", {
+        const res = await fetch("/api/products/all-product-list", {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

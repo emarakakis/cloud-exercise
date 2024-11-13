@@ -1,7 +1,7 @@
 export const userCarts = JSON.parse(localStorage.getItem('userCarts')) || [];
 
 export function getUserCart() {
-    fetch(`http://localhost:3000/cart/${JSON.parse(localStorage.getItem('userId'))}`,{
+    fetch(`/api/cart/${JSON.parse(localStorage.getItem('userId'))}`,{
         method: 'GET',
         headers: {
         'Content-Type': 'application/json',

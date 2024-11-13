@@ -6,7 +6,7 @@ if (!hasUserToken()) {
     window.location.href = "./login.html";
 }
 
-const basaImageURL = "http://localhost:3000/images";
+const basaImageURL = "/api/images";
 
 const viewDisplay = document.querySelector('.js-view-order-display');
 

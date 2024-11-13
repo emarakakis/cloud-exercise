@@ -9,7 +9,7 @@ if(!hasUserToken()){
 let displayHTML = ''
 
 const displayProducts = document.querySelector('.js-cart-display');
-const basaImageURL = "http://localhost:3000/images";
+const basaImageURL = "/api/images";
 
 if(displayProducts){
     displayCart()
@@ -71,7 +71,7 @@ function displayCart(){
                             const newQuantity = Number(document.querySelector(`.js-new-quantity-${productId}`).value);
                             const cartItem = cart[findItemIndexFromProductId(productId)]
                             if (newQuantity > 0) {
-                                const res = await fetch(`http://localhost:3000/cart/upt/${JSON.parse(localStorage.getItem('userId'))}-${productId}`,{
+                                const res = await fetch(`/api/cart/upt/${JSON.parse(localStorage.getItem('userId'))}-${productId}`,{
                                     method: 'POST',
                                     headers: {
                                     'Content-Type': 'application/json',
@@ -102,7 +102,7 @@ function displayCart(){
 }
 
 async function removeItemFromCart(productId) {
-    const res = await fetch(`http://localhost:3000/cart/rmv/${JSON.parse(localStorage.getItem('userId'))}-${productId}`,{
+    const res = await fetch(`/api/cart/rmv/${JSON.parse(localStorage.getItem('userId'))}-${productId}`,{
         method: 'GET',
         headers: {
         'Content-Type': 'application/json',
@@ -140,7 +140,7 @@ export function calculateCartPrice(){
 }
 
 export async function addToCart(productId, quantity){
-    const res = await fetch(`http://localhost:3000/cart/${JSON.parse(localStorage.getItem('userId'))}`,{
+    const res = await fetch(`/api/cart/${JSON.parse(localStorage.getItem('userId'))}`,{
         method: 'POST',
         headers: {
         'Content-Type': 'application/json',
@@ -161,7 +161,7 @@ export async function addToCart(productId, quantity){
 }
 
 async function loadUserCart(){
-    const res = await fetch(`http://localhost:3000/cart/${JSON.parse(localStorage.getItem('userId'))}`,{
+    const res = await fetch(`/api/cart/${JSON.parse(localStorage.getItem('userId'))}`,{
         method: 'GET',
         headers: {
         'Content-Type': 'application/json',
@@ -183,7 +183,7 @@ async function loadUserCart(){
 }
 
 export async function cleanCart(){
-    const res = await fetch(`http://localhost:3000/cart/cln/${JSON.parse(localStorage.getItem('userId'))}`,{
+    const res = await fetch(`/api/cart/cln/${JSON.parse(localStorage.getItem('userId'))}`,{
         method: 'GET',
         headers: {
         'Content-Type': 'application/json',

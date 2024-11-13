@@ -28,7 +28,7 @@ if (orderDisplay){
 }
 
 async function addOrder(firstName, surname, email, city, products, price){
-    const res = await fetch(`http://localhost:3000/orders/${JSON.parse(localStorage.getItem('userId'))}`,{
+    const res = await fetch(`/api/orders/${JSON.parse(localStorage.getItem('userId'))}`,{
         method: 'POST',
         headers: {
         'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ async function addOrder(firstName, surname, email, city, products, price){
 }
 
 export async function removeOrderById(orderId) {
-    const res = await fetch(`http://localhost:3000/orders/rmv/order`,{
+    const res = await fetch(`/api/orders/rmv/order`,{
         method: 'POST',
         headers: {
         'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ export async function removeOrderById(orderId) {
 
 
 export async function findUserOrders(){
-    const res = await fetch(`http://localhost:3000/orders/view/${JSON.parse(localStorage.getItem('userId'))}`,{
+    const res = await fetch(`/api/orders/view/${JSON.parse(localStorage.getItem('userId'))}`,{
         method: 'GET',
         headers: {
         'Content-Type': 'application/json',
